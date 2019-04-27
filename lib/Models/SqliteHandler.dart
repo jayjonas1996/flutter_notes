@@ -11,7 +11,7 @@ class NotesDBHandler {
   final databaseName = "notes.db";
   final tableName = "notes";
 
-  //TODO: develop a function to build the create query from this column:properties dictionary.
+
   final fieldMap = {
     "id": "INTEGER PRIMARY KEY AUTOINCREMENT",
     "title": "BLOB",
@@ -72,7 +72,7 @@ class NotesDBHandler {
 //  " )"
 
 
-
+// build the create query dynamically using the column:field dictionary.
   String _buildCreateQuery() {
     String query = "CREATE TABLE IF NOT EXISTS ";
     query += tableName;
@@ -107,7 +107,7 @@ class NotesDBHandler {
     );
 
     if (isNew) {
-      // get latest note which isn't archived limit by 1
+      // get latest note which isn't archived, limit by 1
       var one = await db.query("notes", orderBy: "date_last_edited desc",
           where: "is_archived = ?",
           whereArgs: [0],
@@ -119,36 +119,47 @@ class NotesDBHandler {
   }
 
 
-  Future<List<Note>> selectAllNotes() async {
-    // acquire database connection instance
+//  Future<List<Note>> selectAllNotes() async {
+//    // acquire database connection instance
+//    final Database db = await database;
+//    // query all the notes sorted by last edited
+//    var data = await db.query("notes", orderBy: "date_last_edited desc",
+//        where: "is_archived = ?",
+//        whereArgs: [0]);
+//
+//    List<Note> notes = [];
+//
+////    List<Map<String,dynamic>>
+//    // create
+//    data.forEach((row) {
+//      String title = row["title"] == null ? "" : utf8.decode(row["title"]);
+//      String content = row["content"] == null ? "" : utf8.decode(
+//          row["content"]);
+//
+//      var tempNote = Note(
+//          row["id"],
+//          title,
+//          content,
+//          DateTime.fromMillisecondsSinceEpoch(row["date_created"] * 1000),
+//          DateTime.fromMillisecondsSinceEpoch(row["date_last_edited"] * 1000),
+//          Color(row["note_color"])
+//      );
+//      print("tempNote $tempNote");
+//      notes.add(tempNote);
+//    });
+//
+//    return notes;
+//  }
+
+  Future<bool> copyNote(Note note) async {
     final Database db = await database;
-    // query all the notes sorted by last edited
-    var data = await db.query("notes", orderBy: "date_last_edited desc",
-        where: "is_archived = ?",
-        whereArgs: [0]);
-
-    List<Note> notes = [];
-
-//    List<Map<String,dynamic>>
-    // create
-    data.forEach((row) {
-      String title = row["title"] == null ? "" : utf8.decode(row["title"]);
-      String content = row["content"] == null ? "" : utf8.decode(
-          row["content"]);
-
-      var tempNote = Note(
-          row["id"],
-          title,
-          content,
-          DateTime.fromMillisecondsSinceEpoch(row["date_created"] * 1000),
-          DateTime.fromMillisecondsSinceEpoch(row["date_last_edited"] * 1000),
-          Color(row["note_color"])
-      );
-      print("tempNote $tempNote");
-      notes.add(tempNote);
-    });
-
-    return notes;
+    try {
+      await db.insert("notes",note.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+    } catch(Error) {
+      print(Error);
+      return false;
+    }
+    return true;
   }
 
 

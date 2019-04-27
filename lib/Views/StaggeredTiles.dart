@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'dart:math';
 import '../ViewControllers/NotePage.dart';
 import '../Models/Note.dart';
 import '../Models/Utility.dart';
@@ -39,7 +38,7 @@ class _MyStaggeredTileState extends State<MyStaggeredTile> {
         border: tileColor == Colors.white ?   Border.all(color: CentralStation.borderColor) : null,
           color: tileColor,
           borderRadius: BorderRadius.all(Radius.circular(8))),
-      padding: EdgeInsets.all(7),
+      padding: EdgeInsets.all(8),
       child:  constructChild(),) ,
     )
     ;
@@ -65,7 +64,7 @@ class _MyStaggeredTileState extends State<MyStaggeredTile> {
           textScaleFactor: 1.5,
         ),
 
-
+ Divider(color: Colors.transparent,height: 6,),
 
       AutoSizeText(
         _content,
@@ -81,7 +80,6 @@ class _MyStaggeredTileState extends State<MyStaggeredTile> {
 
 
  double _determineFontSizeForContent() {
-//    print(widget.note.title);
     int charCount = _content.length + widget.note.title.length ;
     double fontSize = 20 ;
     if (charCount > 110 ) { fontSize = 12; }

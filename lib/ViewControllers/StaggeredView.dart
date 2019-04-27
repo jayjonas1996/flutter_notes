@@ -8,10 +8,7 @@ import 'dart:convert';
 import '../Models/Utility.dart';
 import 'HomePage.dart';
 
-//enum viewType {
-//  List,
-//  Staggered
-//}
+
 
 
 class StaggeredGridPage extends StatefulWidget {
@@ -34,7 +31,7 @@ class _StaggeredGridPageState extends State<StaggeredGridPage> {
 
 
   var  noteDB = NotesDBHandler();
-  var _allNotesInDict = [];
+//  var _allNotesInDict = [];
   List<Map<String, dynamic>> _allNotesInQueryResult = [];
   viewType notesViewType ;
 
@@ -56,8 +53,7 @@ class _StaggeredGridPageState extends State<StaggeredGridPage> {
   @override
   Widget build(BuildContext context) {
 
-    var shortestSide = MediaQuery.of(context).size.shortestSide;
-    final bool useMobileLayout = shortestSide < 600 ;
+
 GlobalKey _stagKey = GlobalKey();
     
     print("update needed?: ${CentralStation.updateNeeded}");
@@ -66,14 +62,13 @@ GlobalKey _stagKey = GlobalKey();
     }
     return OrientationBuilder(
         builder: (context, orientation) {
-      return Container(child: Padding(padding:  _paddingForView(context)/*EdgeInsets.all(8.0)*/ , child:
+      return Container(child: Padding(padding:  _paddingForView(context) , child:
 
       new StaggeredGridView.count(key: _stagKey,
         crossAxisSpacing: 6,
         mainAxisSpacing: 6,
         crossAxisCount: _colForStaggeredView(context,orientation),
-        children: List.generate(_allNotesInQueryResult.length/*_allNotesInDict.length*/, (i){ return _tileGenerator(i) ; }),//_tilesFromAllData(),
-//        staggeredTiles:  List.generate(_allNotesInDict.length, (i){ return StaggeredTile.fit(widget.notesViewType == viewType.List ? 1 : 2); })  /*_tilesSize*/,)
+        children: List.generate(_allNotesInQueryResult.length, (i){ return _tileGenerator(i) ; }),//_tilesFromAllData(),
       staggeredTiles: _tilesForView() ,
           ),
       ) );
@@ -95,7 +90,7 @@ GlobalKey _stagKey = GlobalKey();
   }
 
  List<StaggeredTile> _tilesForView() {
-  return List.generate(_allNotesInQueryResult.length/*_allNotesInDict.length*/,(index){ return StaggeredTile.fit( widget.notesViewType == viewType.List ? 1 : 2 ); }
+  return List.generate(_allNotesInQueryResult.length,(index){ return StaggeredTile.fit( widget.notesViewType == viewType.List ? 1 : 2 ); }
   ) ;
 }
 
@@ -132,15 +127,6 @@ EdgeInsets _paddingForView(BuildContext context){
       Color(_allNotesInQueryResult[i]["note_color"] ))
   );
 
-
-
-//    return MyStaggeredTile( Note(_allNotesInDict[i].id,   // later when selestAll will be returning "List<Map<String,dynamic>>" use ["id"] instead of .id
-//        _allNotesInDict[i].title,
-//        _allNotesInDict[i].content,
-//        _allNotesInDict[i].date_created,
-//        _allNotesInDict[i].date_last_edited,
-//        _allNotesInDict[i].note_color,
-//         ) ) ;
   }
 
 

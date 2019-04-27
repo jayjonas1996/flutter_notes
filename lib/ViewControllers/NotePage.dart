@@ -88,7 +88,7 @@ class _NotePageState extends State<NotePage> {
 
       Container(
       color: note_color,
-      padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+      padding: EdgeInsets.only(left: 16, right: 16, top: 12),
       child:
 
       SafeArea(child:
@@ -96,6 +96,9 @@ class _NotePageState extends State<NotePage> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Flexible(
+      child: Container(
+          padding: EdgeInsets.all(5),
+//          decoration: BoxDecoration(border: Border.all(color: CentralStation.borderColor,width: 1 ),borderRadius: BorderRadius.all(Radius.circular(10)) ),
             child: EditableText(
                 onChanged: (str) => {updateNoteObject()},
                 maxLines: null,
@@ -103,15 +106,18 @@ class _NotePageState extends State<NotePage> {
                 focusNode: _titleFocus,
                 style: TextStyle(
                     color: Colors.black,
-                    fontSize: 20,
+                    fontSize: 22,
                     fontWeight: FontWeight.bold),
                 cursorColor: Colors.blue,
                 backgroundCursorColor: Colors.blue),
           ),
+          ),
 
           Divider(color: CentralStation.borderColor,),
 
-          Flexible(
+          Flexible( child: Container(
+    padding: EdgeInsets.all(5),
+//    decoration: BoxDecoration(border: Border.all(color: CentralStation.borderColor,width: 1),borderRadius: BorderRadius.all(Radius.circular(10)) ),
               child: EditableText(
             onChanged: (str) => {updateNoteObject()},
             maxLines: 300, // line limit extendable later
@@ -120,7 +126,10 @@ class _NotePageState extends State<NotePage> {
             style: TextStyle(color: Colors.black, fontSize: 20),
             backgroundCursorColor: Colors.red,
             cursorColor: Colors.blue,
-          ))
+          )
+          )
+          )
+
         ],
       ),
           left: true,right: true,top: false,bottom: false,
@@ -275,7 +284,8 @@ class _NotePageState extends State<NotePage> {
           break;
         }
       case moreOptions.copy : {
-        // send note to copy query and
+        // TODO: call query -> set needs update flag true -> pop
+          _copy();
         break;
       }
     }
@@ -388,6 +398,29 @@ class _NotePageState extends State<NotePage> {
     // TODO: OPTIONAL show the toast of deletion completion
     Scaffold.of(context).showSnackBar(new SnackBar(content: Text("deleted")));
   }
+
+  void _copy(){
+    var noteDB = NotesDBHandler();
+    Note copy = Note(-1,
+        _editableNote.title,
+        _editableNote.content,
+        DateTime.now(),
+        DateTime.now(),
+        _editableNote.note_color) ;
+
+//    copy.date_created = DateTime.now();
+//    copy.date_last_edited = DateTime.now();
+
+    var status = noteDB.copyNote(copy);
+    status.then((query_success){
+      if (query_success){
+        CentralStation.updateNeeded = true;
+        Navigator.of(_globalKey.currentContext).pop();
+      }
+    });
+  }
+
+
 
   void _undo() {
     _titleController.text = widget.noteInEditing.title;

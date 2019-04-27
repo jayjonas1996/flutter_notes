@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import '../Views/StaggeredTiles.dart';
+
 
 class Note {
   int id;
