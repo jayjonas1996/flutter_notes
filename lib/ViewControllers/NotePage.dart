@@ -279,12 +279,11 @@ class _NotePageState extends State<NotePage> {
       case moreOptions.share:
         {
           if (_editableNote.content.isNotEmpty) {
-            Share.share(_editableNote.content);
+            Share.share("${_editableNote.title}\n${_editableNote.content}");
           }
           break;
         }
       case moreOptions.copy : {
-        // TODO: call query -> set needs update flag true -> pop
           _copy();
         break;
       }
