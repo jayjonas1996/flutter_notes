@@ -28,7 +28,8 @@ class _HomePageState extends State<HomePage> {
     return
        Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: AppBar(actions: _appBarActions(),
+      appBar: AppBar(brightness: Brightness.light,
+        actions: _appBarActions(),
         elevation: 1,
         backgroundColor: Colors.white,
         centerTitle: true,

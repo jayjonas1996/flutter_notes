@@ -6,7 +6,7 @@ import '../Models/Utility.dart';
 //import '../Models/ColorSlider.dart';
 import '../Views/MoreOptionsSheet.dart';
 import 'package:share/share.dart';
-import '../Models/ColorSlider.dart';
+import 'package:flutter/services.dart';
 
 class NotePage extends StatefulWidget {
   final Note noteInEditing;
@@ -68,7 +68,7 @@ class _NotePageState extends State<NotePage> {
     return WillPopScope(
       child: Scaffold(
         key: _globalKey,
-        appBar: AppBar(
+        appBar: AppBar(brightness: Brightness.light,
           leading: BackButton(
             color: Colors.black,
           ),
