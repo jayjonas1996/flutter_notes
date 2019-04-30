@@ -422,8 +422,8 @@ class _NotePageState extends State<NotePage> {
 
 
   void _undo() {
-    _titleController.text = widget.noteInEditing.title;
-    _contentController.text = widget.noteInEditing.content;
+    _titleController.text = _titleFrominitial;// widget.noteInEditing.title;
+    _contentController.text = _contentFromInitial;// widget.noteInEditing.content;
     _editableNote.date_last_edited = widget.noteInEditing.date_last_edited;
   }
 }
