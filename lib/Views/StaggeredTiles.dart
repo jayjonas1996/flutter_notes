@@ -52,29 +52,38 @@ class _MyStaggeredTileState extends State<MyStaggeredTile> {
 
 
   Widget constructChild() {
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
+
+    List<Widget> contentsOfTiles = [];
+
+    if(widget.note.title.length != 0) {
+      contentsOfTiles.add(
         AutoSizeText(
           title,
           style: TextStyle(fontSize: _fontSize,fontWeight: FontWeight.bold),
 //      maxFontSize: 30,
-          maxLines: 3,
+          maxLines: widget.note.title.length == 0 ? 1 : 3,
           textScaleFactor: 1.5,
         ),
+      );
+      contentsOfTiles.add(Divider(color: Colors.transparent,height: 6,),);
+    }
 
- Divider(color: Colors.transparent,height: 6,),
-
-      AutoSizeText(
-        _content,
-        style: TextStyle(fontSize: _fontSize),
+    contentsOfTiles.add(
+        AutoSizeText(
+          _content,
+          style: TextStyle(fontSize: _fontSize),
 //      maxFontSize: 30,
-        maxLines: 10,
-        textScaleFactor: 1.5,
-      )
+          maxLines: 10,
+          textScaleFactor: 1.5,
+        )
+    );
 
-    ]);
+
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children:     contentsOfTiles
+    );
 
   }
 
