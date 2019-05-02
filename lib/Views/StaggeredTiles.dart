@@ -5,8 +5,6 @@ import '../Models/Note.dart';
 import '../Models/Utility.dart';
 
 class MyStaggeredTile extends StatefulWidget {
-
-
   final Note note;
   MyStaggeredTile(this.note);
   @override
@@ -32,24 +30,20 @@ class _MyStaggeredTileState extends State<MyStaggeredTile> {
 
     return GestureDetector(
       onTap: ()=> _noteTapped(context),
-      child:
-      Container(
+      child: Container(
       decoration: BoxDecoration(
         border: tileColor == Colors.white ?   Border.all(color: CentralStation.borderColor) : null,
           color: tileColor,
           borderRadius: BorderRadius.all(Radius.circular(8))),
       padding: EdgeInsets.all(8),
       child:  constructChild(),) ,
-    )
-    ;
+    );
   }
 
   void _noteTapped(BuildContext ctx) {
     CentralStation.updateNeeded = false;
     Navigator.push(ctx, MaterialPageRoute(builder: (ctx) => NotePage(widget.note)));
   }
-
-
 
   Widget constructChild() {
 
@@ -60,7 +54,6 @@ class _MyStaggeredTileState extends State<MyStaggeredTile> {
         AutoSizeText(
           title,
           style: TextStyle(fontSize: _fontSize,fontWeight: FontWeight.bold),
-//      maxFontSize: 30,
           maxLines: widget.note.title.length == 0 ? 1 : 3,
           textScaleFactor: 1.5,
         ),
@@ -72,19 +65,16 @@ class _MyStaggeredTileState extends State<MyStaggeredTile> {
         AutoSizeText(
           _content,
           style: TextStyle(fontSize: _fontSize),
-//      maxFontSize: 30,
           maxLines: 10,
           textScaleFactor: 1.5,
         )
     );
-
 
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children:     contentsOfTiles
     );
-
   }
 
 

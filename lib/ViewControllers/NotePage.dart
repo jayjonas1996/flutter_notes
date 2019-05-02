@@ -3,7 +3,6 @@ import '../Models/Note.dart';
 import '../Models/SqliteHandler.dart';
 import 'dart:async';
 import '../Models/Utility.dart';
-//import '../Models/ColorSlider.dart';
 import '../Views/MoreOptionsSheet.dart';
 import 'package:share/share.dart';
 import 'package:flutter/services.dart';
@@ -26,6 +25,7 @@ class _NotePageState extends State<NotePage> {
 
   String _titleFrominitial ;
    String _contentFromInitial;
+   DateTime _lastEditedForUndo;
 
 
 
@@ -42,6 +42,7 @@ class _NotePageState extends State<NotePage> {
     _titleController.text = _editableNote.title;
     _contentController.text = _editableNote.content;
     note_color = _editableNote.note_color;
+    _lastEditedForUndo = widget.noteInEditing.date_last_edited;
 
     _titleFrominitial = widget.noteInEditing.title;
     _contentFromInitial = widget.noteInEditing.content;
@@ -249,9 +250,6 @@ class _NotePageState extends State<NotePage> {
     print("same title? ${_editableNote.title == _titleFrominitial}");
     print("same content? ${_editableNote.content == _contentFromInitial}");
 
-//    if (!(_editableNote.title == widget.noteInEditing.title &&
-//        _editableNote.content == widget.noteInEditing.content) ||
-//        (_isNewNote)) {
 
     if (!(_editableNote.title == _titleFrominitial &&
             _editableNote.content == _contentFromInitial) ||
@@ -407,8 +405,6 @@ class _NotePageState extends State<NotePage> {
         DateTime.now(),
         _editableNote.note_color) ;
 
-//    copy.date_created = DateTime.now();
-//    copy.date_last_edited = DateTime.now();
 
     var status = noteDB.copyNote(copy);
     status.then((query_success){
@@ -424,6 +420,6 @@ class _NotePageState extends State<NotePage> {
   void _undo() {
     _titleController.text = _titleFrominitial;// widget.noteInEditing.title;
     _contentController.text = _contentFromInitial;// widget.noteInEditing.content;
-    _editableNote.date_last_edited = widget.noteInEditing.date_last_edited;
+    _editableNote.date_last_edited = _lastEditedForUndo;// widget.noteInEditing.date_last_edited;
   }
 }

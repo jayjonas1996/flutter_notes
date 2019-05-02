@@ -3,8 +3,6 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqlite_api.dart';
 import 'dart:async';
 import 'Note.dart';
-import 'dart:convert';
-import 'package:flutter/material.dart';
 
 class NotesDBHandler {
 
@@ -49,27 +47,6 @@ class NotesDBHandler {
     _buildCreateQuery();
     return dbConnection;
   }
-//  "CREATE TABLE notes("
-//  "id INTEGER PRIMARY KEY AUTOINCREMENT , "
-//  "title BLOB, "
-//  "content BLOB,"
-//  "date_created INTEGER, "
-//  "date_last_edited INTEGER,"
-//  "note_color INTEGER,"
-//  "is_archived INTEGER"
-//  " )"
-
-
-
-//  "CREATE TABLE IF NOT EXISTS notes("
-//  "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-//  "title BLOB, "
-//  "content BLOB,"
-//  "date_created INTEGER, "
-//  "date_last_edited INTEGER"
-//  "note_color INTEGER,"
-//  "is_archived INTEGER"
-//  " )"
 
 
 // build the create query dynamically using the column:field dictionary.
@@ -102,7 +79,7 @@ class NotesDBHandler {
 
     // Insert the Notes into the correct table.
     await db.insert('notes',
-      isNew ? note.toMap() : note.toMapForUpdate(),
+      isNew ? note.toMap(false) : note.toMap(true),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
 
@@ -119,42 +96,10 @@ class NotesDBHandler {
   }
 
 
-//  Future<List<Note>> selectAllNotes() async {
-//    // acquire database connection instance
-//    final Database db = await database;
-//    // query all the notes sorted by last edited
-//    var data = await db.query("notes", orderBy: "date_last_edited desc",
-//        where: "is_archived = ?",
-//        whereArgs: [0]);
-//
-//    List<Note> notes = [];
-//
-////    List<Map<String,dynamic>>
-//    // create
-//    data.forEach((row) {
-//      String title = row["title"] == null ? "" : utf8.decode(row["title"]);
-//      String content = row["content"] == null ? "" : utf8.decode(
-//          row["content"]);
-//
-//      var tempNote = Note(
-//          row["id"],
-//          title,
-//          content,
-//          DateTime.fromMillisecondsSinceEpoch(row["date_created"] * 1000),
-//          DateTime.fromMillisecondsSinceEpoch(row["date_last_edited"] * 1000),
-//          Color(row["note_color"])
-//      );
-//      print("tempNote $tempNote");
-//      notes.add(tempNote);
-//    });
-//
-//    return notes;
-//  }
-
   Future<bool> copyNote(Note note) async {
     final Database db = await database;
     try {
-      await db.insert("notes",note.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+      await db.insert("notes",note.toMap(false), conflictAlgorithm: ConflictAlgorithm.replace);
     } catch(Error) {
       print(Error);
       return false;
@@ -169,7 +114,7 @@ class NotesDBHandler {
 
       int idToUpdate = note.id;
 
-      db.update("notes", note.toMapForUpdate(), where: "id = ?",
+      db.update("notes", note.toMap(true), where: "id = ?",
           whereArgs: [idToUpdate]);
     }
   }
@@ -188,8 +133,7 @@ class NotesDBHandler {
   }
 
 
-  Future<List<Map<String,dynamic>>> testSelect() async {
-    // TODO: return query data
+  Future<List<Map<String,dynamic>>> selectAllNotes() async {
     final Database db = await database;
     // query all the notes sorted by last edited
     var data = await db.query("notes", orderBy: "date_last_edited desc",
