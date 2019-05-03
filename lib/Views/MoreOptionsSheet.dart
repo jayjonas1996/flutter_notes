@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../Models/ColorSlider.dart';
+import 'ColorSlider.dart';
 import '../Models/Utility.dart';
 
 enum moreOptions { delete, share, copy }
